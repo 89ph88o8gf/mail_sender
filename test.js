@@ -1,63 +1,53 @@
-const http = require("http");
+const express = require("express");
+
+const app = express();
 
 const PORT = process.env.PORT || 8080;
 
-const server = http.createServer((req, res) => {
-    res.writeHead(200, {
-        "Content-Type": "text/plain"
-    });
+app.get("/ok", async (req, res) => {
 
-    res.end("Server radi!");
-});
+    await sendEmail();
 
-server.listen(PORT, "0.0.0.0", () => {
-    console.log("SERVER RADI NA PORTU:", PORT);
-
-    sendEmail();
+    res.send("OK");
 });
 
 async function sendEmail() {
-    try {
-        console.log("POKUSAVAM DA POSALJEM EMAIL...");
 
-        const response = await fetch(
-            "https://api.brevo.com/v3/smtp/email",
-            {
-                method: "POST",
+    const response = await fetch(
+        "https://api.brevo.com/v3/smtp/email",
+        {
+            method: "POST",
 
-                headers: {
-                    "accept": "application/json",
-                    "api-key": process.env.BREVO_API_KEY,
-                    "content-type": "application/json"
+            headers: {
+                "accept": "application/json",
+                "api-key": process.env.BREVO_API_KEY,
+                "content-type": "application/json"
+            },
+
+            body: JSON.stringify({
+                sender: {
+                    name: "saferchoice",
+                    email: "mihajlovicpavle702@gmail.com"
                 },
 
-                body: JSON.stringify({
-                    sender: {
-                        name: "saferchoice",
-                        email: "mihajlovicpavle702@gmail.com"
-                    },
+                to: [
+                    {
+                        email: "gvozdenovicmihajlo772@gmail.com"
+                    }
+                ],
 
-                    to: [
-                        {
-                            email: "gvozdenovicmihajlo772@gmail.com"
-                        }
-                    ],
+                subject: "Test email",
 
-                    subject: "Test email",
+                textContent: "Zdravo! Ovo je test poruka preko Brevo API-ja."
+            })
+        }
+    );
 
-                    textContent:
-                        "Zdravo! Ovo je test poruka preko Brevo API-ja."
-                })
-            }
-        );
+    console.log("BREVO STATUS:", response.status);
 
-        console.log("BREVO STATUS:", response.status);
-
-        const data = await response.text();
-
-        console.log("BREVO ODGOVOR:", data);
-
-    } catch (error) {
-        console.error("BREVO ERROR:", error);
-    }
+    return response.status === 201;
 }
+
+app.listen(PORT, () => {
+    console.log(`Server radi na portu ${PORT}`);
+});
