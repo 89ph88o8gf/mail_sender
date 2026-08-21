@@ -1,31 +1,53 @@
+const http = require("http");
 const Brevo = require("@getbrevo/brevo");
 
-const apiInstance = new Brevo.TransactionalEmailsApi();
+const port = process.env.PORT || 3000;
 
-apiInstance.authentications.apiKey.apiKey =
-    "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";
+// LIVE SERVER
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Server radi!");
+});
 
-const sendSmtpEmail = new Brevo.SendSmtpEmail();
+server.listen(port, "0.0.0.0", () => {
+    console.log("SERVER RADI NA PORTU " + port);
 
-sendSmtpEmail.subject = "Test email";
-sendSmtpEmail.textContent = "Zdravo! Ovo je test poruka preko Brevo API-ja.";
+    sendEmail();
+});
 
+async function sendEmail() {
+    try {
+        const apiInstance = new Brevo.TransactionalEmailsApi();
 
-sendSmtpEmail.sender = {
-    name: "saferchoice",
-    email: "mihajlovicpavle702@gmail.com"
-};
+        apiInstance.authentications.apiKey.apiKey =
+            "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";
 
-sendSmtpEmail.to = [
-    {
-        email: "gvozdenovicmihajlo772@gmail.com"
-    }
-];
+        const email = new Brevo.SendSmtpEmail();
 
-apiInstance.sendTransacEmail(sendSmtpEmail)
-    .then(() => {
+        email.subject = "Test email";
+
+        email.textContent =
+            "Zdravo! Ovo je test poruka preko Brevo API-ja.";
+
+        email.sender = {
+            name: "saferchoice",
+            email: "mihajlovicpavle702@gmail.com"
+        };
+
+        email.to = [
+            {
+                email: "gvozdenovicmihajlo772@gmail.com"
+            }
+        ];
+
+        const result =
+            await apiInstance.sendTransacEmail(email);
+
         console.log("EMAIL POSLAT!");
-    })
-    .catch((error) => {
-        console.error("GRESKA:", error);
-    });
+        console.log(result);
+
+    } catch (error) {
+        console.error("BREVO GRESKA:");
+        console.error(error);
+    }
+}
