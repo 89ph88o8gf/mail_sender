@@ -19,7 +19,7 @@ async function sendEmail() {
             method: "POST",
             headers: {
                 "accept": "application/json",
-                "api-key": "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",
+                "api-key": "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",
                 "content-type": "application/json"
             },
             body: JSON.stringify({
