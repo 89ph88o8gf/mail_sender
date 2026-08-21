@@ -1,11 +1,10 @@
 {
   "name": "brevo-test",
   "version": "1.0.0",
-  "main": "test.js",
   "scripts": {
     "start": "node test.js"
   },
   "dependencies": {
-    "nodemailer": "^7.0.0"
+    "@getbrevo/brevo": "^3.0.0"
   }
 }
