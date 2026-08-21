@@ -15,6 +15,8 @@ server.listen(PORT, "0.0.0.0", () => {
 
 async function sendEmail() {
     try {
+        console.log("POKUSAVAM DA POSALJEM EMAIL...");
+
         const response = await fetch("https://api.brevo.com/v3/smtp/email", {
             method: "POST",
             headers: {
@@ -37,11 +39,16 @@ async function sendEmail() {
             })
         });
 
+        console.log("BREVO STATUS:", response.status);
+
         const data = await response.text();
 
-        console.log("BREVO STATUS:", response.status);
         console.log("BREVO ODGOVOR:", data);
 
+    } catch (error) {
+        console.error("BREVO ERROR:", error);
+    }
+}
     } catch (error) {
         console.error("GREŠKA:", error);
     }
