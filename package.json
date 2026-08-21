@@ -3,8 +3,5 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node test.js"
-  },
-  "dependencies": {
-    "@getbrevo/brevo": "^3.0.0"
   }
 }
