@@ -5,14 +5,14 @@ const transporter = nodemailer.createTransport({
     port: 587,
     secure: false,
     auth: {
-        user: "TVOJ_BREVO_LOGIN",
-        pass: "TVOJ_BREVO_SMTP_KEY"
+        user: "b64861001@smtp-brevo.com",
+        pass: "bskbQFr1hwpWi0w"
     }
 });
 
 transporter.sendMail({
-    from: "TVOJA_VERIFIKOVANA_EMAIL",
-    to: "TVOJ_TEST_EMAIL",
+    from: "mihajlovicpavle702@gmail.com",
+    to: "gvozdenovicmihajlo772@gmail.com",
     subject: "Test",
     text: "Ovo je test email preko Brevo-a."
 })
