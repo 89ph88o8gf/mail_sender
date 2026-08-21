@@ -1,9 +1,12 @@
 const http = require("http");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 const server = http.createServer((req, res) => {
-    res.writeHead(200);
+    res.writeHead(200, {
+        "Content-Type": "text/plain"
+    });
+
     res.end("Server radi!");
 });
 
@@ -17,27 +20,36 @@ async function sendEmail() {
     try {
         console.log("POKUSAVAM DA POSALJEM EMAIL...");
 
-        const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-            method: "POST",
-            headers: {
-                "accept": "application/json",
-                "api-key": process.env.BREVO_API_KEY,
-                "content-type": "application/json"
-            },
-            body: JSON.stringify({
-                sender: {
-                    name: "saferchoice",
-                    email: "mihajlovicpavle702@gmail.com"
+        const response = await fetch(
+            "https://api.brevo.com/v3/smtp/email",
+            {
+                method: "POST",
+
+                headers: {
+                    "accept": "application/json",
+                    "api-key": process.env.BREVO_API_KEY,
+                    "content-type": "application/json"
                 },
-                to: [
-                    {
-                        email: "gvozdenovicmihajlo772@gmail.com"
-                    }
-                ],
-                subject: "Test email",
-                textContent: "Zdravo! Ovo je test poruka preko Brevo API-ja."
-            })
-        });
+
+                body: JSON.stringify({
+                    sender: {
+                        name: "saferchoice",
+                        email: "mihajlovicpavle702@gmail.com"
+                    },
+
+                    to: [
+                        {
+                            email: "gvozdenovicmihajlo772@gmail.com"
+                        }
+                    ],
+
+                    subject: "Test email",
+
+                    textContent:
+                        "Zdravo! Ovo je test poruka preko Brevo API-ja."
+                })
+            }
+        );
 
         console.log("BREVO STATUS:", response.status);
 
@@ -47,9 +59,5 @@ async function sendEmail() {
 
     } catch (error) {
         console.error("BREVO ERROR:", error);
-    }
-}
-    } catch (error) {
-        console.error("GREŠKA:", error);
     }
 }
